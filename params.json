@@ -1,0 +1,6 @@
+{
+  "name": "Hid-gamepad",
+  "tagline": "This is my attemt to make a HID gamepad using an Arduino Mega R3 (32u2 and 2560)",
+  "body": "# HID-gamepad\r\nThis is my attemt to make a HID gamepad using an Arduino Mega R3 (32u2 and 2560). \r\n\r\nThis repository (and following code) is a work in progress. I am working on this project, as something for me to do in the holidays. Expect documentation, in form of a Wiki, comming up after initial testing of the code. \r\n\r\n\r\n### Steps to be done:\r\n\r\n- [X] Define data-structure of internal communication\r\n- [ ] Write serial parser for the 32u2\r\n- [ ] Write a routine to collect data from hardware\r\n\r\n\r\n### Currently using:\r\n\r\n* [HoodLoader2](https://github.com/NicoHood/HoodLoader2)\r\n* [HID-project](https://github.com/NicoHood/HID)\r\n\r\n-------------------------------------------------------------\r\nFeel free to contact me, should you feel the need!\r\n",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}
