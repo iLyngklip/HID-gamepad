@@ -11,4 +11,10 @@ This repository (and following code) is a work in progress. I am working on this
 - [ ] Write a routine to collect data from hardware
 
 
+### Currently using:
+
+* [HoodLoader2](https://github.com/NicoHood/HoodLoader2)
+* [HID-project](https://github.com/NicoHood/HID)
+
+-------------------------------------------------------------
 Feel free to contact me, should you feel the need!
