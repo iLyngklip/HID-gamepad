@@ -1,28 +1,48 @@
+//##############################################
+//#  DEBUGGING SETTINGS                        #
+//##############################################
 #define DEBUG 0
 
-#define OK_MSG  0xFF
+//##############################################
+//#  Serial SETTINGS                           #
+//##############################################
+#define INTERNAL_BAUDRATE 2000000
+#define NUMBER_OF_BYTES   17
+    //-----------------------------------------|
+    // Messages                                |
+    //-----------------------------------------|
+    #define OK_MSG  0xFF
 
+//##############################################
+//#  General SETTINGS                          #
+//##############################################    
+#define UPDATE_INTERVAL_MS  500
 
+//##############################################
+//#  Includes                                  #
+//##############################################
 #include <HID-Project.h>
 #include <HID-Settings.h>
 
-#define UPDATE_INTERVAL_MS  500
 
+//##############################################
+//#  Global variables                          #
+//##############################################
 uint16_t timeHolder = 0;
 
 
 void setup() {
-  // put your setup code here, to run once:
-
-  Serial1.begin(2000000);
+  Serial1.begin(INTERNAL_BAUDRATE);
+  Gamepad.begin();
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  
   if(millis() - timeHolder < UPDATE_INTERVAL_MS){
     Serial1.print(OK_MSG);
+    
     // Wait for data to be sent
-    while(Serial1.available() <= 0){}
+    while(Serial1.available() <= NUMBER_OF_BYTES);
     
     uint16_t temp = 0;
     temp |= Serial.read() << 8;
