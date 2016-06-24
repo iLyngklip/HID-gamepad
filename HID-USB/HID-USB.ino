@@ -11,7 +11,9 @@
     //-----------------------------------------|
     // Messages                                |
     //-----------------------------------------|
-    #define OK_MSG  0xFF
+    #define OK_MSG    0xFF
+    #define CFG_MSG   0xFE
+    #define END_MSG   0xFD
 
 //##############################################
 //#  General SETTINGS                          #
@@ -34,7 +36,7 @@ uint16_t timeHolder = 0;
 void setup() {
   Serial1.begin(INTERNAL_BAUDRATE);
   Gamepad.begin();
-}
+}// Setup
 
 void loop() {
   
@@ -56,4 +58,9 @@ void loop() {
     temp = 0x00;
     
   }
-}
+}// Loop
+
+
+
+
+
