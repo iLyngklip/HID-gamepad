@@ -10,17 +10,74 @@
     #define USB_MODE  1
       // See "Defines for readability"
 
-  // something else
+  // Input settings
+    // Axis
+      #define NUMBER_OF_AXIS                3
+      #define USE_INTERNAL_PULLUP_ON_AXIS   0
 
+      
+    // Buttons
+    #define NUMBER_OF_BUTTONS 10
 
+    // Axis resolution
+      #define AXIS_RESOLUTION 1024
+        // This equals 16 bit
+
+// ----------------------------------------------------
+// Pin definetions ------------------------------------
+
+  // Axis
+    #define X_AXIS_PIN  0
+    #define Y_AXIS_PIN  1
+    #define Z_AXIS_PIN  2
+
+  // Buttons
+    // Buttons
+      #define BUTTON_1    1
+      #define BUTTON_2    2
+      #define BUTTON_3    3
+      #define BUTTON_4    4
+      #define BUTTON_5    5
+      #define BUTTON_6    6
+      #define BUTTON_7    7
+      #define BUTTON_8    8
+      #define BUTTON_9    9
+      #define BUTTON_10   10
+      
+      #define BUTTON_11   11
+      #define BUTTON_12   12
+      #define BUTTON_13   13
+      #define BUTTON_14   14
+      #define BUTTON_15   15
+      #define BUTTON_16   16
+      #define BUTTON_17   17
+      #define BUTTON_18   18
+      #define BUTTON_19   19
+      #define BUTTON_20   20
+      
+      #define BUTTON_21   21
+      #define BUTTON_22   22
+      #define BUTTON_23   23
+      #define BUTTON_24   24
+      #define BUTTON_25   25
+      #define BUTTON_26   26
+      #define BUTTON_27   27
+      #define BUTTON_28   28
+      #define BUTTON_29   29
+      #define BUTTON_30   30
+      
+      #define BUTTON_31   31
+      #define BUTTON_32   32
+  
+  
   
 // ----------------------------------------------------
 // Debug settings -------------------------------------
-#define DEBUG 0
+#define DEBUG 1
 
 // ----------------------------------------------------
 // Serial settings ------------------------------------
-#define INTERNAL_BAUDRATE 2000000
+#define INTERNAL_BAUDRATE 9600
   // Messages
     #define OK_MSG    0xFF
     #define CFG_MSG   0xFE
@@ -39,10 +96,15 @@
 
     
   // Data handlers
-    #define LOCAL_X_AXIS  0
-    #define LOCAL_Y_AXIS  1
-    #define LOCAL_Z_AXIS  2
+    // Axis
+      #define LOCAL_X_AXIS  0
+      #define LOCAL_Y_AXIS  1
+      #define LOCAL_Z_AXIS  2
 
+    
+      
+      
+  
     
 
 // ----------------------------------------------------
@@ -56,6 +118,8 @@ struct gamePadData{
   uint16_t _xAxis = 0;
   uint16_t _yAxis = 0;
   uint16_t _zAxis = 0;
+
+  uint32_t _buttons = 0;
 } gamePadData;
 
 
@@ -71,11 +135,28 @@ struct gamePadData{
 
 
 void setup() {
-  // Initialize the connection to the 32u2
+  // Initialize the connection to the USB-MCU
   Serial.begin(INTERNAL_BAUDRATE);
 
+  #if DEBUG
+    Serial.println("Hello world!");
+  #endif
 
-  setAxis(LOCAL_X_AXIS, random(0, 0xFF));
+
+
+  #if USE_INTERNAL_PULLUP_ON_AXIS
+    pinMode(X_AXIS_PIN, INPUT_PULLUP);
+    pinMode(Y_AXIS_PIN, INPUT_PULLUP);
+    pinMode(Z_AXIS_PIN, INPUT_PULLUP);
+  #else
+    pinMode(X_AXIS_PIN, INPUT);
+    pinMode(Y_AXIS_PIN, INPUT);
+    pinMode(Z_AXIS_PIN, INPUT);
+  #endif
+  
+  
+  
+  // setAxis(LOCAL_X_AXIS, random(0, 0xFF));
 } // setup
 
 
@@ -94,7 +175,7 @@ void loop() {
   } else {
     // It's not time to send data.
     // So let's collect data!
-
+    collectData();
     
   }// if else
 
@@ -129,7 +210,7 @@ void collectData(){
 void getAxisData(){
   /*
    * This function is for:
-   *      Collection Axis-positions
+   *      Collecting ALL Axis-positions
    *    
    * 
    * Parameters:
@@ -138,20 +219,40 @@ void getAxisData(){
    * Returns:
    *      None
    */  
+
+  // Reading and mapping analog value
+  gamePadData._xAxis = map(analogRead(X_AXIS_PIN), 0, 1024, 0, AXIS_RESOLUTION);
+  gamePadData._yAxis = map(analogRead(Y_AXIS_PIN), 0, 1024, 0, AXIS_RESOLUTION);
+  gamePadData._zAxis = map(analogRead(Z_AXIS_PIN), 0, 1024, 0, AXIS_RESOLUTION);
+   
 }
 
 void getButtonData(){
   /*
    * This function is for:
-   *      
+   *      Reading the button-pins for presses. 
    *    
    * 
    * Parameters:
-   *      
+   *      None
    *      
    * Returns:
-   *      
+   *      None
    */  
+
+
+   for(int i = 1; i < NUMBER_OF_BUTTONS; i++){
+    // Read a button corresponding to "i"
+    if(digitalRead(i)){
+      // The pin is HIGH = not pressed
+      // Set the bit to "0"
+      bitClear(gamePadData._buttons, i);
+    } else {
+      // the pin is LOW = pressed
+      // Set the bit to "1"
+      bitSet(gamePadData._buttons, i);
+    }
+   }
 }
 
 void getDPadData(){
