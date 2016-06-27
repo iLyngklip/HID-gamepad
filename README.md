@@ -6,6 +6,11 @@ This repository (and following code) is a work in progress. I am working on this
 
 ### Steps to be done:
 
+<<<<<<< HEAD
+- [+] Define data-structure of internal communication
+- [-] Write serial parser for the 32u2
+- [ ] Write a routine to collect data from hardware
+=======
 - [X] Define data-structure of internal communication
 - [ ] Write serial parser for the 32u2
 - [X] Write a routine to collect data from hardware
@@ -21,6 +26,7 @@ This repository (and following code) is a work in progress. I am working on this
 * Made coarse definition of communication
 
 
+>>>>>>> master
 
 
 ### Currently using:
