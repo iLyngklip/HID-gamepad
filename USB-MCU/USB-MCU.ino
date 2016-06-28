@@ -13,7 +13,7 @@
 
 // ----------------------------------------------------
 // Serial settings ------------------------------------
-#define INTERNAL_BAUDRATE 9600
+#define INTERNAL_BAUDRATE 2000000
 #define NUMBER_OF_BYTES   17
     //-----------------------------------------|
     // Messages                                |
@@ -24,7 +24,8 @@
 
 // ----------------------------------------------------
 // General settings -----------------------------------   
-#define UPDATE_INTERVAL_MS  500
+#define UPDATE_INTERVAL_MS        500
+#define NUMBER_OF_BUTTONS_IN_USE  10
 
 // ----------------------------------------------------
 // Includes -------------------------------------------
@@ -38,7 +39,7 @@
 uint16_t timeHolder = 0;
 
 
-
+uint8_t numberOfBytesToExpect = 2; // Define number of bytes to expect
 
 
 
@@ -58,57 +59,67 @@ void setup() {
   #endif
 }// Setup
 
+
+
+
+
+
+
 void loop() {
-    #if DEBUG
-      Serial.print(OK_MSG);
-      // Wait for ALL the data to be sent
-      while(Serial.available() <= NUMBER_OF_BYTES);
-      
-      uint16_t temp = 0;
-      temp |= Serial.read() << 8;
-      Serial.print("Temp << 8: ");
-      Serial.print(temp);
-      
-      temp |= Serial.read();
-      Serial.print("Temp total: ");
-      Serial.print(temp);
-      
-      // Gamepad.xAxis(temp);
-      temp = 0x00;
-    
-      temp |= Serial.read() << 8;
-      temp |= Serial.read();
-      // Gamepad.yAxis(temp);
-      temp = 0x00;
-  
 
-      Serial.println();
-      Serial.println();
-    #else
-  
-    Serial1.print(OK_MSG);
-    
-    // Wait for ALL the data to be sent
-    while(Serial1.available() <= NUMBER_OF_BYTES);
-    
-    uint16_t temp = 0;
-    // Get the most significant byte
-    temp |= Serial1.read() << 8;    
-    // Least significant
-    temp |= Serial1.read();    
-    // Store it
-    Gamepad.xAxis(temp);
 
-    // Clear temp
-    temp = 0x00;
-  
-    temp |= Serial1.read() << 8;
-    temp |= Serial1.read();
-    Gamepad.yAxis(temp);
-    temp = 0x00;
+  // Send I'm rdy msg
+  Serial.write(OK_MSG);
 
-    // End the DEBUG case
-    #endif 
+
+  // Wait for the whole msg to arraive
+  while(Serial.available() < numberOfBytesToExpect);
+  while(Serial.read() != OK_MSG);
+
+// Read axis
+  // X-axis
+  uint16_t tempAxisVariable = 0x0000;
+  tempAxisVariable |= Serial.read() << 8;
+  tempAxisVariable |= Serial.read();
+  #if DEBUG == 0
+    Gamepad.xAxis = tempAxisVariable;
+  #else
+    Serial.write(tempAxisVariable >> 8);
+    Serial.write(tempAxisVariable);
+    Serial.write(0x00);
+  #endif
+
+
+  // Y-axis
+  tempAxisVariable = 0x0000;
+  tempAxisVariable |= Serial.read() << 8;
+  tempAxisVariable |= Serial.read();
+  #if DEBUG == 0
+    Gamepad.yAxis = tempAxisVariable;
+  #else
+    Serial.write(tempAxisVariable >> 8);
+    Serial.write(tempAxisVariable);
+    Serial.write(0x00);
+  #endif
+
+
+  // Z-axis
+  tempAxisVariable = 0x0000;
+  tempAxisVariable |= Serial.read() << 8;
+  tempAxisVariable |= Serial.read();
+  #if DEBUG == 0
+    Gamepad.zAxis = tempAxisVariable;
+  #else
+    Serial.write(tempAxisVariable >> 8);
+    Serial.write(tempAxisVariable);
+    Serial.write(0x00);
+  #endif
+
+
+
+  // Buttons - 10 stk.
+  
+  
 
 
 
@@ -116,6 +127,17 @@ void loop() {
     // Now we wait for update interval
     delay(UPDATE_INTERVAL_MS);
 }// Loop
+
+
+
+
+
+
+
+
+
+
+
 
 
 
