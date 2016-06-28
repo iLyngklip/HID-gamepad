@@ -28,8 +28,8 @@
 
   // Axis
     #define X_AXIS_PIN  0
-    #define Y_AXIS_PIN  1
-    #define Z_AXIS_PIN  2
+    #define Y_AXIS_PIN  3
+    #define Z_AXIS_PIN  5
 
   // Buttons
     // Buttons
@@ -221,10 +221,18 @@ void getAxisData(){
    */  
 
   // Reading and mapping analog value
-  gamePadData._xAxis = map(analogRead(X_AXIS_PIN), 0, 1024, 0, AXIS_RESOLUTION);
-  gamePadData._yAxis = map(analogRead(Y_AXIS_PIN), 0, 1024, 0, AXIS_RESOLUTION);
-  gamePadData._zAxis = map(analogRead(Z_AXIS_PIN), 0, 1024, 0, AXIS_RESOLUTION);
-   
+  uint16_t temp = 0;
+  temp |= map(analogRead(X_AXIS_PIN), 0, 1024, 0, AXIS_RESOLUTION);
+  gamePadData._xAxis = temp;
+  
+  temp &= 0;
+  temp |= map(analogRead(Y_AXIS_PIN), 0, 1024, 0, AXIS_RESOLUTION);
+  gamePadData._yAxis = temp;
+
+  temp &= 0;
+  temp |= map(analogRead(Z_AXIS_PIN), 0, 1024, 0, AXIS_RESOLUTION);
+  gamePadData._zAxis = temp;
+  
 }
 
 void getButtonData(){
