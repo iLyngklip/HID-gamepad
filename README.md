@@ -8,7 +8,18 @@ This repository (and following code) is a work in progress. I am working on this
 
 - [X] Define data-structure of internal communication
 - [ ] Write serial parser for the 32u2
-- [ ] Write a routine to collect data from hardware
+- [X] Write a routine to collect data from hardware
+
+### Changelog ([Full log](https://github.com/iLyngklip/HID-gamepad/commits/master))
+
+#### 0.0.9 - The "Hello world!" update
+* Sub-systems is ready for whole-system testing
+
+
+#### 0.0.8
+* Added most of the needed files
+* Made coarse definition of communication
+
 
 
 ### Currently using:
@@ -18,3 +29,5 @@ This repository (and following code) is a work in progress. I am working on this
 
 -------------------------------------------------------------
 Feel free to contact me, should you feel the need!
+
+
